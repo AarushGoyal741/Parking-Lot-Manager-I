@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Book Parking Spot</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='book_spot_form.css') }}">
+</head>
+<body>
+
+<div class="form-container">
+    <h2>🅿️ Confirm Booking</h2>
+
+    <div class="spot-details">
+        <p><strong>Lot Location:</strong> {{ spot.p_lot.loc }}</p>
+        <p><strong>Spot ID:</strong> {{ spot.spot_id }}</p>
+        <p><strong>Rate per Hour:</strong> ₹{{ spot.p_lot.price }}</p>
+    </div>
+
+    <form method="POST" action="{{ url_for('book_spot', spot_id=spot.id) }}">
+        <div class="form-group">
+            <label for="vehicle_number">Vehicle Number:</label>
+            <input type="text" name="vehicle_number" id="vehicle_number" required placeholder="e.g. DL01AB1234">
+        </div>
+
+        <button type="submit" class="btn">✅ Confirm Booking</button>
+
+        <a href="{{ url_for('home') }}" class="btn cancel">❌ Cancel</a>
+    </form>
+</div>
+
+</body>
+</html>

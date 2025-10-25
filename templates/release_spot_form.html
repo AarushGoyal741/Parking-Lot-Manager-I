@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Release Parking Spot</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='release_spot_form.css') }}">
+</head>
+<body>
+
+<div class="form-container">
+    <h2>🚘 Release Your Spot</h2>
+
+    <div class="spot-details">
+        <p><strong>Lot Location:</strong> {{ spot.p_lot.loc }}</p>
+        <p><strong>Spot ID:</strong> {{ spot.spot_id }}</p>
+        <p><strong>Entry Time:</strong> {{ txn.entry_time.strftime('%Y-%m-%d %H:%M') }}</p>
+    </div>
+
+    <form method="POST" action="{{ url_for('release_spot', spot_id=spot.id) }}">
+        <button type="submit" class="btn">✅ Confirm Release</button>
+        <a href="{{ url_for('home') }}" class="btn cancel">❌ Cancel</a>
+    </form>
+</div>
+
+</body>
+</html>

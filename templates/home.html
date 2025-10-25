@@ -1,0 +1,186 @@
+<!--
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home - Parking Assistant</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+        }
+        
+        .home-container {
+            background: white;
+            padding: 50px;
+            border-radius: 15px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+            text-align: center;
+            max-width: 600px;
+            width: 100%;
+        }
+        
+        h1 {
+            color: #333;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+        
+        .welcome-message {
+            color: #666;
+            font-size: 1.3em;
+            margin-bottom: 30px;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 12px 25px;
+            margin: 10px;
+            background: #667eea;
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn:hover {
+            background: #5a6fd8;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <div class="home-container">
+        <h1>🏠 Welcome to Home Page</h1>
+        <p class="welcome-message">
+            You have successfully logged in! 
+            Your parking management dashboard will be here.
+        </p>
+        
+        <div class="navigation">
+            <a href="{{ url_for('landing') }}" class="btn">Back to Landing</a>
+            
+        </div>
+        
+        <div style="margin-top: 30px; padding-top: 20px; border-top: 2px solid #eee;">
+            <p style="color: #888; font-size: 14px;">
+                Coming soon: Parking spot booking, payment integration, and more!
+            </p>
+        </div>
+    </div>
+</body>
+</html>
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User Dashboard - Parking Assistant</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='home.css') }}">
+</head>
+<body>
+
+<div class="navbar">
+    <div>
+        Welcome {{ session['username'] }}
+        <a href="{{ url_for('home') }}">Home</a>
+        <a href="{{ url_for('user_summary') }}">Summary</a>
+        <a href="{{ url_for('logout') }}">Logout</a>
+    </div>
+    <div>
+        <a href="#">Edit Profile</a>
+    </div>
+</div>
+
+<div class="container">
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="flash">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <h2>🔁 Recent Parking History</h2>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Location</th>
+            <th>Vehicle</th>
+            <th>Timestamp</th>
+            <th>Action</th>
+            <th>Cost</th>
+        </tr>
+        {% for txn in history %}
+        <tr>
+            <td>{{ txn.id }}</td>
+            <td>{{ txn.p_spot.p_lot.loc }}</td>
+            <td>{{ txn.vehicle_number or '—' }}</td>
+            {% set ist_time = txn.entry_time + timedelta(hours=5, minutes=30) %}
+            <td>{{ ist_time.strftime("%Y-%m-%d %H:%M") }} <span style="color: #777; font-size: 0.85em;">(IST)</span></td>
+
+            <td>
+                {% if not txn.leave_time %}
+                    <a href="{{ url_for('release_form', spot_id=txn.spot_id) }}" class="btn btn-danger">Release</a>
+                {% else %}
+                    Parked Out
+                {% endif %}
+            </td>
+            <td>
+                {% if txn.cost %}
+                    ₹{{ "%.2f"|format(txn.cost) }}
+                {% else %}
+                    —
+                {% endif %}
+            </td>
+
+        </tr>
+        {% endfor %}
+    </table>
+
+    <h2>📍 Search Parking by Location</h2>
+    <form method="POST" class="search-bar">
+        <input type="text" name="search_location" placeholder="Enter location or pincode...">
+        <button type="submit">Search</button>
+    </form>
+
+    <h2>🅿️ Parking Lots</h2>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Address</th>
+            <th>Available Spots</th>
+            <th>Rate/hr</th>
+            <th>Action</th>
+        </tr>
+        {% for lot in lots %}
+        <tr>
+            <td>{{ lot.id }}</td>
+            <td>{{ lot.loc }}</td>
+            <td>{{ lot.parking_spots|selectattr('status', 'equalto', 'V')|list|length }}</td>
+            <td>₹{{ lot.price }}</td>
+            <td>
+                {% set vacant_spot = lot.parking_spots | selectattr('status', 'equalto', 'V') | list | first %}
+                {% if vacant_spot %}
+                    <a href="{{ url_for('render_book_form', spot_id=vacant_spot.id) }}" class="btn">Book</a>
+                {% else %}
+                    Full
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+
+</body>
+</html>

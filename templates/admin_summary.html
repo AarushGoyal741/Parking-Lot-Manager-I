@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Summary Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='admin_summary.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>📊 Admin Revenue & Occupancy Summary</h1>
+
+        <div class="chart-section">
+            <div>
+                <h3>Top 5 Lots by Revenue</h3>
+                <canvas id="pieChart"></canvas>
+            </div>
+            <div style="width: 400px; height: 400px; margin-top: 0px;">
+                <h3>Available vs Occupied Spots</h3>
+                <div padding: 15px 200px;> <canvas id="barChart"></canvas> </div>
+            </div>
+        </div>
+
+        <div class="dropdown-section">
+            <h3>🔍 Revenue by Lot</h3>
+            <input type="text" id="searchInput" onkeyup="filterTable()" placeholder="Search for locations..">
+            <table id="lotTable">
+                <thead>
+                    <tr>
+                        <th>Location</th>
+                        <th>Total Revenue (₹)</th>
+                        <th>% of Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for lot in lot_summary %}
+                    <tr>
+                        <td>{{ lot.loc }}</td>
+                        <td>₹{{ "%.2f"|format(lot.revenue) }}</td>
+                        <td>{{ lot.percentage }}%</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        const pieCtx = document.getElementById('pieChart').getContext('2d');
+        const barCtx = document.getElementById('barChart').getContext('2d');
+
+        new Chart(pieCtx, {
+            type: 'pie',
+            data: {
+                labels: {{ pie_labels|tojson }},
+                datasets: [{
+                    data: {{ pie_values|tojson }},
+                    backgroundColor: ['#ff6384', '#36a2eb', '#ffcd56', '#4bc0c0', '#9966ff', '#c9cbcf']
+                }]
+            },
+            options: {
+                responsive: true,
+                
+            }
+        });
+
+        new Chart(barCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Available', 'Occupied'],
+                datasets: [{
+                    label: 'Spots',
+                    data: [{{ available }}, {{ occupied }}],
+                    backgroundColor: ['#36a2eb', '#ff6384']
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        function filterTable() {
+            const input = document.getElementById("searchInput");
+            const filter = input.value.toLowerCase();
+            const table = document.getElementById("lotTable");
+            const tr = table.getElementsByTagName("tr");
+
+            for (let i = 1; i < tr.length; i++) {
+                const td = tr[i].getElementsByTagName("td")[0];
+                if (td) {
+                    const txtValue = td.textContent || td.innerText;
+                    tr[i].style.display = txtValue.toLowerCase().indexOf(filter) > -1 ? "" : "none";
+                }
+            }
+        }
+    </script>
+</body>
+</html>

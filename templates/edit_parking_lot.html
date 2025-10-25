@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Parking Lot</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='edit_parking_lot.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>🛠️ Edit Parking Lot</h1>
+
+        <form method="POST">
+            <!-- Price Update -->
+            <div class="form-section">
+                <label for="price">💰 Price per Hour (in ₹):</label>
+                <input type="text" name="price" id="price" value="{{ lot.price }}" required>
+            </div>
+
+            <!-- Add New Spots -->
+            <div class="form-section">
+                <label for="add_spots">➕ Add New Spots:</label>
+                <input type="number" name="add_spots" id="add_spots" placeholder="Enter number of spots">
+            </div>
+
+            <!-- Delete Spots (only vacant ones) -->
+            <div class="form-section">
+                <h3>🗑️ Delete Vacant Spots</h3>
+                <p>Select the vacant spots you want to delete:</p>
+                <div class="checkbox-group">
+                    {% for spot in spots %}
+                        {% if spot.status == 'V' %}
+                            <label>
+                                <input type="checkbox" name="delete_spots" value="{{ spot.spot_id }}">
+                                {{ spot.spot_id }}
+                            </label>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if not spots|selectattr("status", "equalto", "V")|list %}
+                        <p class="note">No vacant spots available for deletion.</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit">✅ Save Changes</button>
+                <a href="{{ url_for('view_parking_lot', lot_id=lot.id) }}" class="cancel">← Cancel</a>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

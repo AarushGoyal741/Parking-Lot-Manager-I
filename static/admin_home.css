@@ -1,0 +1,208 @@
+.button-group {
+    display: flex;
+    justify-content: center;
+    gap: 12px; /* Reduced from 20px */
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+
+.create-btn {
+    width: 324px; /* Fixed width for all buttons */
+    text-align: center;
+    padding: 15px 20px;
+    border-radius: 8px;
+    font-size: 1.05em;
+    font-weight: bold;
+    text-decoration: none;
+    color: white;
+    border: none;
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+
+.create-btn.green {
+    background-color: #2ed573;
+}
+
+.create-btn.purple {
+    background-color: #6f42c1;
+}
+
+.create-btn.blue {
+    background-color: #0771c7;
+}
+
+.create-btn:hover {
+    transform: scale(1.05);
+    opacity: 0.9;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body {
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    color: #333;
+}
+.admin-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+.header {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.header h1 {
+    color: #667eea;
+    font-size: 2.5em;
+}
+.logout-btn {
+    background: #ff4757;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background 0.3s;
+}
+.logout-btn:hover {
+    background: #ff3742;
+}
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 30px;
+    margin-bottom: 30px;
+}
+.control-panel {
+    background: white;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+.control-panel h2 {
+    color: #667eea;
+    margin-bottom: 20px;
+    font-size: 1.8em;
+}
+
+.stats {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    margin-top: 20px;
+}
+.stats h3 {
+    color: #495057;
+    margin-bottom: 10px;
+}
+.stat-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
+    padding: 5px 0;
+    border-bottom: 1px solid #dee2e6;
+}
+.parking-lots {
+    background: white;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+.parking-lots h2 {
+    color: #667eea;
+    margin-bottom: 20px;
+    font-size: 1.8em;
+}
+.lot-card {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    border-left: 4px solid #667eea;
+    transition: transform 0.3s;
+}
+.lot-card:hover {
+    transform: translateX(5px);
+}
+.lot-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+.lot-title {
+    font-size: 1.3em;
+    font-weight: bold;
+    color: #495057;
+}
+.lot-price {
+    background: #2ed573;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 0.9em;
+}
+.lot-info {
+    display: flex;
+    gap: 20px;
+    color: #6c757d;
+}
+.view-btn {
+    background: #667eea;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 0.9em;
+    margin-top: 10px;
+    display: inline-block;
+    transition: background 0.3s;
+}
+.view-btn:hover {
+    background: #5a6fd8;
+}
+.no-lots {
+    text-align: center;
+    color: #6c757d;
+    font-style: italic;
+    padding: 40px;
+}
+.flash-messages {
+    margin-bottom: 20px;
+}
+.flash-message {
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+.flash-success {
+    background: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+.flash-error {
+    background: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+.flash-info {
+    background: #cce7ff;
+    color: #004085;
+    border: 1px solid #b8daff;
+}

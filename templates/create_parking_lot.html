@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Parking Lot - Admin</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .form-container {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .form-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .form-header h1 {
+            color: #667eea;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .form-header p {
+            color: #6c757d;
+            font-size: 1.1em;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #495057;
+            font-size: 1.1em;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .input-group {
+            position: relative;
+        }
+
+        .input-icon {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6c757d;
+            font-size: 1.2em;
+        }
+
+        .form-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background: #2ed573;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #26d765;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+            transform: translateY(-2px);
+        }
+
+        .info-box {
+            background: #e3f2fd;
+            border: 1px solid #bbdefb;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            color: #1976d2;
+        }
+
+        .info-box h3 {
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+
+        .info-box ul {
+            margin-left: 20px;
+        }
+
+        .info-box li {
+            margin-bottom: 5px;
+        }
+
+        .flash-messages {
+            margin-bottom: 20px;
+        }
+
+        .flash-message {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .flash-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .flash-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <div class="form-header">
+            <h1>🏗️ Create Parking Lot</h1>
+            <p>Set up a new parking facility</p>
+        </div>
+
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for category, message in messages %}
+                        <div class="flash-message flash-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        <div class="info-box">
+            <h3>📋 Information</h3>
+            <ul>
+                <li>Location should be specific and descriptive</li>
+                <li>Price is per hour in ₹</li>
+                <li>Spots will be automatically numbered (1, 2, 3...)</li>
+                <li>All spots start as vacant by default</li>
+            </ul>
+        </div>
+
+        <form method="POST">
+            <div class="form-group">
+                <label for="location">📍 Location:</label>
+                <div class="input-group">
+                    <textarea id="location" name="location" placeholder="Enter detailed location address..." required></textarea>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="price">💰 Price per Hour (₹):</label>
+                <div class="input-group">
+                    <input type="number" id="price" name="price" placeholder="Enter price per hour" min="1" required>
+                    <span class="input-icon">₹</span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="spots">🅿️ Number of Spots:</label>
+                <div class="input-group">
+                    <input type="number" id="spots" name="spots" placeholder="Enter total number of parking spots" min="1" max="500" required>
+                    <span class="input-icon">#</span>
+                </div>
+            </div>
+
+            <div class="form-buttons">
+                <button type="submit" class="btn btn-primary">
+                    ✅ Create Parking Lot
+                </button>
+                <a href="{{ url_for('admin_home') }}" class="btn btn-secondary">
+                    ❌ Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // Add some basic validation
+        document.querySelector('form').addEventListener('submit', function(e) {
+            const location = document.getElementById('location').value.trim();
+            const price = document.getElementById('price').value;
+            const spots = document.getElementById('spots').value;
+
+            if (location.length < 10) {
+                alert('Please provide a more detailed location (at least 10 characters)');
+                e.preventDefault();
+                return;
+            }
+
+            if (price < 1 || price > 1000) {
+                alert('Price should be between ₹1 and ₹1000 per hour');
+                e.preventDefault();
+                return;
+            }
+
+            if (spots < 1 || spots > 500) {
+                alert('Number of spots should be between 1 and 500');
+                e.preventDefault();
+                return;
+            }
+
+            // Show loading state
+            const submitBtn = document.querySelector('.btn-primary');
+            submitBtn.innerHTML = '⏳ Creating...';
+            submitBtn.disabled = true;
+        });
+    </script>
+</body>
+</html>

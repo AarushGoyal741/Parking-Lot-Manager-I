@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Parking Assistant</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='admin_home.css') }}">
+    
+</head>
+<body>
+    <div class="admin-container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🚗 Admin Dashboard</h1>
+            <a href="{{ url_for('logout') }}" class="logout-btn">Logout</a>
+        </div>
+
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for category, message in messages %}
+                        <div class="flash-message flash-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        <!-- Dashboard Grid -->
+        <div class="dashboard-grid">
+            <!-- Control Panel -->
+            <div class="control-panel">
+                <h2>Control Panel</h2>
+                <div class="button-group">
+                    <a href="{{ url_for('create_parking_lot') }}" class="create-btn green">
+                        ➕ Create New Parking Lot
+                    </a>
+                    <a href="{{ url_for('view_all_users') }}" class="create-btn purple">
+                        👥 View Users & History
+                    </a>
+                    <a href="{{ url_for('admin_summary') }}" class="create-btn blue">
+                        📊 View Lots' Summary
+                    </a>
+                </div>
+
+
+                
+                <div class="stats">
+                    <h3>Quick Stats</h3>
+                    <div class="stat-item">
+                        <span>Total Parking Lots:</span>
+                        <span>{{ parking_lots|length }}</span>
+                    </div>
+                    <div class="stat-item">
+                        <span>Total Spots:</span>
+                        <span>{{ parking_lots|sum(attribute='spots') }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Parking Lots -->
+            <div class="parking-lots">
+                <h2>Existing Parking Lots</h2>
+                
+                {% if parking_lots %}
+                    {% for lot in parking_lots %}
+                        <div class="lot-card">
+                            <div class="lot-header">
+                                <div class="lot-title">📍 {{ lot.loc }}</div>
+                                <div class="lot-price">₹{{ lot.price }}/hour</div>
+                            </div>
+                            <div class="lot-info">
+                                <span>🅿️ {{ lot.spots }} spots</span>
+                                <span>🆔 ID: {{ lot.id }}</span>
+                            </div>
+                            <a href="{{ url_for('view_parking_lot', lot_id=lot.id) }}" class="view-btn">
+                                View Details
+                            </a>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="no-lots">
+                        <p>No parking lots created yet. Create your first parking lot to get started!</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,57 @@
+body {
+    font-family: Arial, sans-serif;
+    background: #f4f6f9;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.form-container {
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    width: 400px;
+    text-align: center;
+}
+
+h2 {
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.spot-details {
+    text-align: left;
+    margin-bottom: 25px;
+}
+
+.spot-details p {
+    margin: 8px 0;
+    font-size: 1.05em;
+}
+
+.btn {
+    padding: 10px 20px;
+    font-size: 1em;
+    background-color: #667eea;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    margin: 10px;
+    text-decoration: none;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.btn:hover {
+    background-color: #5a6fd8;
+}
+
+.cancel {
+    background-color: #aaa;
+}
+
+.cancel:hover {
+    background-color: #888;
+}

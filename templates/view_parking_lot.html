@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Parking Lot - Admin</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .nav-buttons {
+            background: #f8f9fa;
+            padding: 20px;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .nav-buttons a {
+            display: inline-block;
+            margin-right: 15px;
+            padding: 10px 20px;
+            background: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: 500;
+            transition: background 0.3s;
+        }
+
+        .nav-buttons a:hover {
+            background: #0056b3;
+        }
+
+        .nav-buttons a.secondary {
+            background: #6c757d;
+        }
+
+        .nav-buttons a.secondary:hover {
+            background: #545b62;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .lot-info {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            border-left: 5px solid #007bff;
+        }
+
+        .lot-info h2 {
+            color: #343a40;
+            margin-bottom: 20px;
+            font-size: 2em;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .info-item {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .info-item h3 {
+            color: #495057;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .info-item p {
+            color: #6c757d;
+            font-size: 1.2em;
+            font-weight: 600;
+        }
+
+        .spots-section {
+            margin-top: 40px;
+        }
+
+        .spots-section h2 {
+            color: #343a40;
+            margin-bottom: 30px;
+            font-size: 2em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .spots-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .spot-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border-left: 4px solid #28a745;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .spot-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .spot-card.occupied {
+            border-left-color: #dc3545;
+            background: #fff5f5;
+        }
+
+        .spot-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .spot-id {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #343a40;
+        }
+
+        .spot-status {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .spot-status.vacant {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .spot-status.occupied {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .spot-details {
+            color: #6c757d;
+            line-height: 1.6;
+        }
+
+        .spot-details p {
+            margin-bottom: 5px;
+        }
+
+        .no-spots {
+            text-align: center;
+            padding: 60px 20px;
+            color: #6c757d;
+        }
+
+        .no-spots h3 {
+            font-size: 1.5em;
+            margin-bottom: 15px;
+        }
+
+        .no-spots p {
+            font-size: 1.1em;
+            margin-bottom: 25px;
+        }
+
+        .stats-summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .stat-card.occupied {
+            background: linear-gradient(135deg, #dc3545 0%, #fd7e14 100%);
+        }
+
+        .stat-card.total {
+            background: linear-gradient(135deg, #007bff 0%, #6610f2 100%);
+        }
+
+        .stat-number {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .flash-messages {
+            margin-bottom: 20px;
+        }
+
+        .flash-message {
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            font-weight: 500;
+        }
+
+        .flash-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .flash-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .flash-info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .header p {
+                font-size: 1em;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+            
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .spots-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .nav-buttons a {
+                display: block;
+                margin: 5px 0;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🚗 Parking Lot Details</h1>
+            <p>Comprehensive view of parking lot and spot information</p>
+        </div>
+
+        <!-- Navigation -->
+        <div class="nav-buttons">
+            <a href="{{ url_for('admin_home') }}">← Back to Dashboard</a>
+            <a href="{{ url_for('create_parking_lot') }}" class="secondary">Create New Lot</a>
+            <a href="{{ url_for('delete_parking_lot', lot_id=lot.id) }}" 
+                onclick="return confirm('Are you sure you want to delete this lot? This action is irreversible.');"
+                class="secondary" style="background: #dc3545;">
+                🗑️ Delete This Lot
+            </a>
+            <a href="{{ url_for('edit_parking_lot', lot_id=lot.id) }}" class="secondary" style="background: #ffc107;">
+                ✏️ Edit This Lot
+            </a>
+
+
+        </div>
+
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for category, message in messages %}
+                        <div class="flash-message flash-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        <div class="content">
+            <!-- Parking Lot Information -->
+            <div class="lot-info">
+                <h2>{{ lot.loc }}</h2>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <h3>📍 Location</h3>
+                        <p>{{ lot.loc }}</p>
+                    </div>
+                    <div class="info-item">
+                        <h3>💰 Price per Hour</h3>
+                        <p>₹{{ lot.price }}/hour</p>
+                    </div>
+                    <div class="info-item">
+                        <h3>🏢 Lot ID</h3>
+                        <p>#{{ lot.id }}</p>
+                    </div>
+                    <div class="info-item">
+                        <h3>📊 Total Capacity</h3>
+                        <p>{{ lot.spots }} spots</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Statistics Summary -->
+            {% if spots %}
+                <div class="stats-summary">
+                    <div class="stat-card total">
+                        <div class="stat-number">{{ spots|length }}</div>
+                        <div class="stat-label">Total Spots</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">{{ spots|selectattr('status', 'equalto', 'V')|list|length }}</div>
+                        <div class="stat-label">Available</div>
+                    </div>
+                    <div class="stat-card occupied">
+                        <div class="stat-number">{{ spots|selectattr('status', 'equalto', 'O')|list|length }}</div>
+                        <div class="stat-label">Occupied</div>
+                    </div>
+                </div>
+            {% endif %}
+
+            <!-- Parking Spots Section -->
+            <div class="spots-section">
+                <h2>🅿️ Parking Spots</h2>
+                
+                {% if spots %}
+                    <div class="spots-grid">
+                        {% for spot in spots %}
+                            <div class="spot-card {% if spot.status == 'O' %}occupied{% endif %}">
+                                <div class="spot-header">
+                                    <div class="spot-id">Spot {{ spot.spot_id }}</div>
+                                    <div class="spot-status {% if spot.status == 'V' %}vacant{% else %}occupied{% endif %}">
+                                        {% if spot.status == 'V' %}
+                                            Available
+                                        {% else %}
+                                            Occupied
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="spot-details">
+                                    <p><strong>Spot ID:</strong> {{ spot.spot_id }}</p>
+                                    <p><strong>Lot ID:</strong> {{ spot.lot_id }}</p>
+                                    <p><strong>Status:</strong> 
+                                        {% if spot.status == 'V' %}
+                                            Vacant - Ready for booking
+                                        {% else %}
+                                            Occupied - Currently in use
+                                        {% endif %}
+                                    </p>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="no-spots">
+                        <h3>🚫 No Parking Spots Found</h3>
+                        <p>This parking lot doesn't have any spots created yet.</p>
+                        <a href="{{ url_for('create_parking_lot') }}" class="nav-buttons">
+                            <span style="background: #007bff; color: white; padding: 10px 20px; border-radius: 5px; text-decoration: none;">
+                                Create Spots for this Lot
+                            </span>
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</body>
+</html>
